@@ -1,6 +1,5 @@
 const express = require('express');
 let books = require("./booksdb.js");
-let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 const jwt = require('jsonwebtoken');
 const public_users = express.Router();
@@ -16,17 +15,6 @@ const doesExist = (username)=>{
     }
 }
 
-const authenticatedUser = (username,password)=>{
-    let validusers = users.filter((user)=>{
-      return (user.username === username && user.password === password)
-    });
-    if(validusers.length > 0){
-      return true;
-    } else {
-      return false;
-    }
-  }
-
 public_users.post("/register", (req,res) => {
     const username = req.body.username;
     const password = req.body.password;
@@ -40,29 +28,6 @@ public_users.post("/register", (req,res) => {
       }
     } 
     return res.status(404).json({message: "Unable to register user."});
-});
-
-//only registered users can login
-public_users.post("/login", (req,res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-  
-    if (!username || !password) {
-        return res.status(404).json({message: "Error logging in"});
-    }
-  
-    if (authenticatedUser(username,password)) {
-      let accessToken = jwt.sign({
-        data: password
-      }, 'access', { expiresIn: 60 * 60 });
-  
-      req.session.authorization = {
-        accessToken,username
-    }
-    return res.status(200).send("User successfully logged in");
-    } else {
-      return res.status(208).json({message: "Invalid Login. Check username and password"});
-    }
 });
 
 // Get the book list available in the shop
