@@ -6,34 +6,48 @@ const axiosInstance = axios.create({
 
 async function getAllBooks() {
 
-    const res = await axiosInstance.get('/');
-    return await res;
+    return await axiosInstance.get('/');
 
 }
 
 getAllBooks().then((res) => {
 
-    console.log(res);
+    console.log(res.data);
 
 });
 
 async function getBooksByIsbn(isbn) {
 
-    const res = await axiosInstance.get('/isbn/' + isbn);
-    return await res.json();
+    return await axiosInstance.get('/isbn/' + isbn);
 
 }
+
+getBooksByIsbn(1).then((res) => {
+
+    console.log(res.data);
+
+});
 
 async function getBooksByAuthor(author) {
 
-    const res = await axiosInstance.get('/author/' + author);
-    return await res.json();
+    return await axiosInstance.get('/author/' + author);
 
 }
+
+getBooksByAuthor("Unknown").then((res) => {
+
+    console.log(res.data);
+
+});
 
 async function getBooksByTitle(title) {
 
-    const res = await axiosInstance.get('/title/' + title);
-    return await res.json();
+    return await axiosInstance.get('/title/' + title);
 
 }
+
+getBooksByTitle("One Thousand and One Nights").then((res) => {
+
+    console.log(res.data);
+
+});
